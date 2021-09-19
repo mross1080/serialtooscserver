@@ -28,7 +28,7 @@ def init_serial_connection():
          print(ports)
          for port in ports:
               print(port)
-              if "COM" in port.device:
+              if "COM" in port.device and "USB-SERIAL" in port.device:
                    port_name = port.device
                    print("Found an Arduino!! Using {} for specified port\n\n".format(port_name))
          ser = Serial(port_name, 115200)  # Establish the connection on a specific port
@@ -55,9 +55,10 @@ while True:
         if "ERROR" not in line:
             sensor_data = line.split(":")
             location_name = sensor_data[1]
-            location_name = "plant1"
+
             plant_state = sensor_data[2]
             distance_to_plant = sensor_data[3]
+            
             client.send_message("/{}/value/".format(location_name), "{} {}".format(plant_state,distance_to_plant))   # Send float message
             # client.send_message("/{}/value".format(location_name), distance_to_plant)   # Send float message
 
