@@ -27,8 +27,9 @@ def init_serial_connection():
          ports = serial.tools.list_ports.comports()
          print(ports)
          for port in ports:
+              print(port.description)
               print(port.device)
-              if "COM" in port.device and "USB-SERIAL" in port.device:
+              if "COM" in port.description and "USB-SERIAL" in port.description:
                    port_name = port.device
                    print("Found an Arduino!! Using {} for specified port\n\n".format(port_name))
          ser = Serial(port_name, 115200)  # Establish the connection on a specific port
