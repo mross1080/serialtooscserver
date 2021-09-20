@@ -69,8 +69,9 @@ while True:
             mapped_distance = float(format(mapped_distance, '.3f'))
 
             print("Distance mapped " , mapped_distance)
+            combined_value = (str(mapped_distance) + " " + str(touch_value))
             # print("/{}/{} {}".format(location_name, plant_state,distance_to_plant))
-            client.send_message("/{}/value/".format(location_name), "{} {}".format(plant_state,mapped_distance))   # Send float message
+            client.send_message("/{}/value/".format(location_name),combined_value)   # Send float message
             # client.send_message("/{}/value".format(location_name), distance_to_plant)   # Send float message
 
 
