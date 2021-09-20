@@ -13,7 +13,7 @@ import time
 from serial import Serial
 import os
 import serial.tools.list_ports
-
+from numpy import interp, clip
 ip = "127.0.0.1"
 port = 7400
 
@@ -55,12 +55,22 @@ while True:
         print("sending osc ")
         if "ERROR" not in line:
             sensor_data = line.split(":")
-            location_name = sensor_data[1]
+            location_name = sensor_data[0].split("-")[1]
+            print("loc ", location_name)
 
-            plant_state = sensor_data[2]
-            distance_to_plant = sensor_data[3]
-            
-            client.send_message("/{}/value/".format(location_name), "{} {}".format(plant_state,distance_to_plant))   # Send float message
+            plant_state = sensor_data[3]
+            touch_value = 0
+            if plant_state == "TOUCH":
+                touch_value = 1
+            distance_to_plant = sensor_data[2]
+            distance_to_plant = clip(float(distance_to_plant), 0, 180)
+
+            mapped_distance = interp(distance_to_plant, [0,180], [0,1])
+            mapped_distance = float(format(mapped_distance, '.3f'))
+
+            print("Distance mapped " , mapped_distance)
+            # print("/{}/{} {}".format(location_name, plant_state,distance_to_plant))
+            client.send_message("/{}/value/".format(location_name), "{} {}".format(plant_state,mapped_distance))   # Send float message
             # client.send_message("/{}/value".format(location_name), distance_to_plant)   # Send float message
 
 
