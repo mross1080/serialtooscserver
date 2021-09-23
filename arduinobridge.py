@@ -51,9 +51,10 @@ first_line = True
 while True:
     try:
         line = ser.readline().decode().strip(" ").strip("\n")
-        print(line)
-        print("sending osc ")
-        if "ERROR" not in line:
+
+        if "ERROR" not in line and line != "":
+            print(line)
+            print("sending osc ")
             sensor_data = line.split(":")
             location_name = sensor_data[0].split("-")[1]
             print("loc ", location_name)
